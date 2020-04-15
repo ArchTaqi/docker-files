@@ -1,8 +1,25 @@
-mysql:
-  image: mysql
-  ports:
-    - "3306:3306"
-  environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=wordpress
-  restart: always
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb:10.4
+    restart: always
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8001:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    volumes:
+      - ./upload.ini:/usr/local/etc/php/php.ini
+volumes:
+  mariadb-data:
+    driver: local
