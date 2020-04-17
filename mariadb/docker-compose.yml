@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: localhost_mariadb
+    restart: always
+    volumes:
+      - '/var/lib/docker/volumes/mariadb_data/_data:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: qwerty
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: localhost_phpmyadmin
+    ports:
+      - 8041:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+    depends_on:
+      - mariadb
+    volumes:
+      - ./upload.ini:/usr/local/etc/php/php.ini
