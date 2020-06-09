@@ -15,7 +15,7 @@ sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
 docker-compose --version
 
 
-
+#$ docker version
 #sudo apt-get purge --auto-remove apparmor
 #sudo service docker restart
 #docker system prune --all --volumes
