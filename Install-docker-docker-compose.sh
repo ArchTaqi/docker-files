@@ -19,3 +19,4 @@ docker-compose --version
 #sudo apt-get purge --auto-remove apparmor
 #sudo service docker restart
 #docker system prune --all --volumes
+# sudo chmod 666 /var/run/docker.sock
