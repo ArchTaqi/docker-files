@@ -1,3 +1,6 @@
+# $ docker-compose up -d
+# $ docker-compose exec postgres psql -U root postgres
+
 version: "3.7"
 services:
   postgres-latest:
@@ -5,6 +8,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./pg:/docker-entrypoint-initdb.d/
-    env_file:
-      - ./docker-compose.env
+      - ./data:/var/lib/postgresql/data
+  environment:
+    - POSTGRES_USER=root
+    - POSTGRES_PASSWORD=root
+    - POSTGRES_DB=postgres
+  restart: always
