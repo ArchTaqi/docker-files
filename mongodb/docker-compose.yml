@@ -1,16 +1,11 @@
 version: "3.7"
 
-volumes:
-  mongo-latest__data:
-    driver: local
-  mongo-latest__config:
-    driver: local
-
 services:
   mongo-latest:
     container_name: mongo-latest
     image: mongo:latest
     network_mode: "bridge"
+    command: --auth
     volumes:
       - type: volume
         source: mongo-latest__data
@@ -22,7 +17,15 @@ services:
         target: /data/configdb
         volume:
           nocopy: false
-    env_file:
-      - ./docker-compose.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
     ports:
       - "27017:27017"
+
+
+volumes:
+  mongo-latest__data:
+    driver: local
+  mongo-latest__config:
+    driver: local
