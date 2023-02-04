@@ -1,0 +1,26 @@
+# docker-compose.yml
+version: "3.8"
+
+services:
+  eshop-db:
+    image: postgres:latest
+    container_name: eshop-db 
+    environment:
+      - POSTGRES_DB=eshop
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres 
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  eshop-ma:
+    image: rabbitmq:3.11.7-management 
+    container name: Queue
+    hostname: eshop-queue 
+    volumes:
+      - /. containers/queue/data/:/var/lib/rabbitma
+      - ./.containers/queue/log/:/var/log/rabbitmq
+    environment:
+      RABBITMO_DEFAULT_USER: guest
+      RABBITMO_ DEFAULT_PASS: guest
