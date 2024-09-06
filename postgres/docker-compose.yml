@@ -1,17 +1,40 @@
 # $ docker-compose up -d
 # $ docker-compose exec postgres psql -U root postgres
-
-version: "3.7"
+volumes:
+    postgres_data:
 services:
-
-  postgres:
-    image: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - ./data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=root
-      - POSTGRES_DB=postgres
-    restart: always
+    postgres:
+        image: postgres:latest
+        container_name: postgres_local
+        restart: always
+        environment:
+            - POSTGRES_USER=root
+            - POSTGRES_PASSWORD=root
+            - POSTGRES_DB=postgres
+            - PGDATA=/tmp/pgdata
+        expose:
+            - "5433"
+        ports:
+            - "5433:5433"
+        command: -p 5433
+        volumes:
+            - postgres_data:/tmp/pgdata
+            # - ./docker_postgres_init.sql:/docker-entrypoint-initdb.d/docker_postgres_init.sql
+    pgadmin-compose:
+        image: dpage/pgadmin4
+        environment: 
+            PGADMIN_DEFAULT_EMAIL: "test@gmail.com"
+            PGADMIN_DEFAULT_PASSWORD: "test123!"
+        ports: 
+            - "16543:80"
+        depends_on: 
+            - postgres
+    pgweb:
+        image: sosedoff/pgweb
+        depends_on:
+            - postgres
+        environment:
+            PGWEB_DATABASE_URL: postgres://root:root@postgres:5433/postgres?sslmode=disable
+        ports:
+            - 8086:8081
+        restart: on-failure:3
